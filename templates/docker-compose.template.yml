@@ -18,15 +18,10 @@ services:
       - "traefik.enable=true"
 
       # Define router for HTTPS
-      - "traefik.http.routers.${USERNAME}.rule=Host(`${USERNAME}.${DOMAIN}`)"
-      # - "traefik.http.routers.${USERNAME}.entrypoints=websecure"
-      # - "traefik.http.routers.${USERNAME}.tls.certresolver=lets-encrypt"
-
-      - "traefik.http.routers.${USERNAME}.rule=Host(`dave.monitor.bigzee.app`)"
+      - "traefik.http.routers.${USERNAME}.rule=Host(`${USERNAME}.monitor.bigzee.app`)"
+      - "traefik.http.routers.${USERNAME}.entrypoints=websecure"
       - "traefik.http.routers.${USERNAME}.tls=true"
       - "traefik.http.routers.${USERNAME}.tls.certresolver=cloudflare"
-      - "traefik.http.routers.${USERNAME}.tls.domains[0].main=monitor.bigzee.app"
-      - "traefik.http.routers.${USERNAME}.tls.domains[0].sans=*.monitor.bigzee.app"
 
       # Specify container port to route to
       - "traefik.http.services.${USERNAME}.loadbalancer.server.port=3001"
