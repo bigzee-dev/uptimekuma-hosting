@@ -1,10 +1,22 @@
 http:
   routers:
-    node-api:
+    # HTTP router
+    node-api-http:
       rule: "Host(`nodeapi.monitor.bigzee.app`)"
       service: node-api
       entryPoints:
         - web
+      middlewares:
+        - redirect-to-https
+
+    # HTTPS router
+    node-api:
+      rule: "Host(`nodeapi.monitor.bigzee.app`)"
+      service: node-api
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: cloudflare
 
   middlewares:
     redirect-to-https:
@@ -12,26 +24,8 @@ http:
         scheme: https
         permanent: true
 
-tls:
-  certificates:
-    - certFile: /letsencrypt/acme.json
-  options:
-    default:
-      minVersion: VersionTLS12
-
-certResolvers:
-  cloudflare:
-    acme:
-      email: zimamankei@gmail.com
-      storage: /letsencrypt/acme.json
-      dnsChallenge:
-        provider: cloudflare
-        resolvers:
-          - "1.1.1.1:53"
-          - "8.8.8.8:53"
-
-services:
-  node-api:
-    loadBalancer:
-      servers:
-        - url: "http://host.docker.internal:3000"
+  services:
+    node-api:
+      loadBalancer:
+        servers:
+          - url: "http://172.17.0.1:3000"
