@@ -1,0 +1,13 @@
+http:
+  routers:
+    node-api:
+      rule: "Host(`api.localhost`)"
+      service: node-api
+      entryPoints:
+        - web
+
+  services:
+    node-api:
+      loadBalancer:
+        servers:
+          - url: "http://172.17.0.1:3000"

@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  uptime-kuma-${USERNAME}:
+    image: louislam/uptime-kuma:latest
+    container_name: uptime-kuma-${USERNAME}
+    restart: unless-stopped
+    volumes:
+      - ./data:/app/data
+    deploy:
+      resources:
+        limits:
+          memory: 350M
+    networks:
+      - web
+    labels:
+      # Enable Traefik routing
+      - "traefik.enable=true"
+
+      # Define router for HTTPS
+      - "traefik.http.routers.${USERNAME}.rule=Host(`${USERNAME}.${DOMAIN}`)"
+      # - "traefik.http.routers.${USERNAME}.entrypoints=websecure"
+      # - "traefik.http.routers.${USERNAME}.tls.certresolver=lets-encrypt"
+
+      # Specify container port to route to
+      - "traefik.http.services.${USERNAME}.loadbalancer.server.port=3001"
+
+networks:
+  web:
+    external: true

@@ -1,0 +1,51 @@
+version: "3.9"
+
+services:
+  traefik:
+    image: traefik:v3
+    container_name: traefik
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command:
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+      - "--providers.file.filename=/etc/traefik/dynamic.yml"
+      # Optional: uncomment these for HTTPS
+      # - "--entrypoints.websecure.address=:443"
+      # - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
+      # - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
+      # - "--certificatesresolvers.myresolver.acme.email=you@example.com"
+      # - "--certificatesresolvers.myresolver.acme.storage=/acme.json"
+    ports:
+      - "80:80"
+      # - "443:443"  # optional
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./traefik/traefik_dynamic.yml:/etc/traefik/dynamic.yml:ro
+      - ./traefik/acme.json:/acme.json
+    networks:
+      - web
+
+  # node-api:
+  #   image: node:20
+  #   container_name: node-api
+  #   working_dir: /app
+  #   environment:
+  #     - NODE_ENV=development
+  #   volumes:
+  #     - ./api:/app
+  #     - /opt/kuma_instances:/instances
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #   command: bash -c "[ -d node_modules ] || npm install && npm run dev"
+  #   labels:
+  #     - "traefik.enable=true"
+  #     - "traefik.http.routers.node-api.rule=Host(`api.localhost`)"
+  #     - "traefik.http.services.node-api.loadbalancer.server.port=3000"
+  #     - "traefik.docker.network=web"
+  #   networks:
+  #     - web
+
+networks:
+  web:
+    external: true
