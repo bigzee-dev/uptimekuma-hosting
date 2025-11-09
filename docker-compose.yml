@@ -30,28 +30,9 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
       - ./traefik/traefik_dynamic.yml:/etc/traefik/dynamic.yml:ro
-      - "./letsencrypt:/letsencrypt"
+      - ./letsencrypt:/letsencrypt
     networks:
       - web
-
-  # node-api:
-  #   image: node:20
-  #   container_name: node-api
-  #   working_dir: /app
-  #   environment:
-  #     - NODE_ENV=development
-  #   volumes:
-  #     - ./api:/app
-  #     - /opt/kuma_instances:/instances
-  #     - /var/run/docker.sock:/var/run/docker.sock
-  #   command: bash -c "[ -d node_modules ] || npm install && npm run dev"
-  #   labels:
-  #     - "traefik.enable=true"
-  #     - "traefik.http.routers.node-api.rule=Host(`api.localhost`)"
-  #     - "traefik.http.services.node-api.loadbalancer.server.port=3000"
-  #     - "traefik.docker.network=web"
-  #   networks:
-  #     - web
 
 networks:
   web:
