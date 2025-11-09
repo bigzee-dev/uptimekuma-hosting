@@ -17,7 +17,13 @@ services:
       # Enable Traefik routing
       - "traefik.enable=true"
 
-      # Define router for HTTPS
+        # HTTP to HTTPS redirect
+      - "traefik.http.routers.${USERNAME}-http.rule=Host(`${USERNAME}.monitor.bigzee.app`)"
+      - "traefik.http.routers.${USERNAME}-http.entrypoints=web"
+      - "traefik.http.routers.${USERNAME}-http.middlewares=${USERNAME}-https-redirect"
+      - "traefik.http.middlewares.${USERNAME}-https-redirect.redirectscheme.scheme=https"
+
+      # HTTPS configuration
       - "traefik.http.routers.${USERNAME}.rule=Host(`${USERNAME}.monitor.bigzee.app`)"
       - "traefik.http.routers.${USERNAME}.entrypoints=websecure"
       - "traefik.http.routers.${USERNAME}.tls=true"
