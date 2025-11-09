@@ -5,8 +5,8 @@ services:
     image: traefik:v3
     container_name: traefik
     environment:
-      - CF_API_EMAIL=zimamankei@gmail.com
-      - CF_API_KEY=your_cloudflare_global_api_key
+      - CF_API_EMAIL=${CF_API_EMAIL}
+      - CF_API_KEY=${CF_API_KEY}
     extra_hosts:
       - "host.docker.internal:host-gateway"
     command:
