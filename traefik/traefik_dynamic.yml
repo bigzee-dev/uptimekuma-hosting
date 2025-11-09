@@ -1,13 +1,37 @@
 http:
   routers:
     node-api:
-      rule: "Host(`api.localhost`)"
+      rule: "Host(`nodeapi.monitor.bigzee.app`)"
       service: node-api
       entryPoints:
         - web
 
-  services:
-    node-api:
-      loadBalancer:
-        servers:
-          - url: "http://172.17.0.1:3000"
+  middlewares:
+    redirect-to-https:
+      redirectScheme:
+        scheme: https
+        permanent: true
+
+tls:
+  certificates:
+    - certFile: /letsencrypt/acme.json
+  options:
+    default:
+      minVersion: VersionTLS12
+
+certResolvers:
+  cloudflare:
+    acme:
+      email: zimamankei@gmail.com
+      storage: /letsencrypt/acme.json
+      dnsChallenge:
+        provider: cloudflare
+        resolvers:
+          - "1.1.1.1:53"
+          - "8.8.8.8:53"
+
+services:
+  node-api:
+    loadBalancer:
+      servers:
+        - url: "http://172.17.0.1:3000"

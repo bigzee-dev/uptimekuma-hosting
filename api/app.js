@@ -3,7 +3,7 @@ const fs = require("fs-extra");
 const path = require("path");
 const { exec } = require("child_process");
 
-const BASE_DIR = process.env.BASE_DIR || "/opt/kuma_instances";
+const BASE_DIR = process.env.BASE_DIR || "/opt/kuma-instances";
 // const API_KEY = process.env.API_KEY || 'change-me';
 const PORT = process.env.PORT || 3000;
 const app = express();

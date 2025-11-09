@@ -4,26 +4,31 @@ services:
   traefik:
     image: traefik:v3
     container_name: traefik
+    environment:
+      - CF_API_EMAIL=zimamankei@gmail.com
+      - CF_API_KEY=your_cloudflare_global_api_key
     extra_hosts:
       - "host.docker.internal:host-gateway"
     command:
       - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
       - "--providers.file.filename=/etc/traefik/dynamic.yml"
-      # Optional: uncomment these for HTTPS
-      # - "--entrypoints.websecure.address=:443"
-      # - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
-      # - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
-      # - "--certificatesresolvers.myresolver.acme.email=you@example.com"
-      # - "--certificatesresolvers.myresolver.acme.storage=/acme.json"
+      # HTTPS
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.cloudflare.acme.email=zimamankei@gmail.com"
+      - "--certificatesresolvers.cloudflare.acme.storage=/letsencrypt/acme.json"
+      - "--certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare"
+      - "--log.level=INFO"
+
     ports:
       - "80:80"
-      # - "443:443"  # optional
+      - "443:443" # optional
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
       - ./traefik/traefik_dynamic.yml:/etc/traefik/dynamic.yml:ro
-      - ./traefik/acme.json:/acme.json
+      - "./letsencrypt:/letsencrypt"
     networks:
       - web
 
