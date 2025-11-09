@@ -5,8 +5,7 @@ services:
     image: traefik:v3
     container_name: traefik
     environment:
-      - CF_API_EMAIL=${CF_API_EMAIL}
-      - CF_API_KEY=${CF_API_KEY}
+      - CF_DNS_API_TOKEN=${CF_DNS_API_TOKEN}
     extra_hosts:
       - "host.docker.internal:host-gateway"
     command:
