@@ -18,14 +18,14 @@ http:
       tls:
         certResolver: cloudflare
 
-  middlewares:
-    redirect-to-https:
-      redirectScheme:
-        scheme: https
-        permanent: true
+middlewares:
+  redirect-to-https:
+    redirectScheme:
+      scheme: https
+      permanent: true
 
-  services:
-    node-api:
-      loadBalancer:
-        servers:
-          - url: "http://172.17.0.1:3000"
+services:
+  node-api:
+    loadBalancer:
+      servers:
+        - url: "http://host.docker.internal:3000"
