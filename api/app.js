@@ -64,7 +64,7 @@ async function getContainerId(serviceName, username, cwd) {
 }
 
 app.get("/", (req, res) => {
-  res.send("🚀 Node API is live (via Traefik)");
+  res.send("🚀 Node API2 is live (via Traefik)");
 });
 
 app.post("/deploy", async (req, res) => {
